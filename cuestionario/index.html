@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuestionario del sistema</title>
+<meta name="description" content="Preguntas para definir el sistema de ventas e inventario de las 3 sucursales.">
+<meta property="og:title" content="Cuestionario del sistema de ventas e inventario">
+<meta property="og:description" content="Preguntas para definir cómo funcionará el sistema en sus sucursales.">
+<meta name="theme-color" content="#0e5e6f">
+<meta name="color-scheme" content="light">
+<style>
+:root{
+  --teal:#0e5e6f; --teal-dark:#0a4855; --green:#1f7a63;
+  --mint:#e3f2ef; --card:#f6faf9; --line:#d5e2de; --line-strong:#b9d3cc;
+  --text:#1a1a1a; --muted:#5f6b69; --bg:#ffffff; --warn:#8a5a00;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:16px/1.55 "Liberation Sans",Arial,"Helvetica Neue",Helvetica,system-ui,sans-serif;
+  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.wrap{width:100%;max-width:600px;margin:0 auto;padding:0 20px}
+@media (max-width:380px){.wrap{padding:0 16px}}
+
+/* Barra superior */
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding-top:env(safe-area-inset-top)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:52px}
+.brand{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.count{font-size:14px;color:var(--muted);white-space:nowrap}
+.bar{height:3px;background:var(--mint)}
+.bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .3s ease}
+.top[hidden]{display:none}
+
+main{flex:1;padding:28px 0 32px}
+main:focus{outline:none}
+.screen{animation:in .28s ease both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen{animation:none}.bar i{transition:none}}
+
+/* Portada */
+.cover{padding-top:6vh}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:0 0 8px}
+.cover h1{font-size:34px;line-height:1.15;color:var(--teal);margin:0 0 12px;font-weight:700}
+.rule{height:1px;background:var(--text);opacity:.55;margin:0 0 10px}
+.mods{color:var(--muted);font-size:15px;margin:0 0 28px}
+.cover p.body{margin:0 0 12px}
+.note{font-size:14px;font-style:italic;color:var(--muted);margin:16px 0 0}
+
+/* Encabezado de sección */
+.sec{display:flex;align-items:center;gap:12px;margin:0 0 22px}
+.chip{flex:0 0 40px;height:40px;border-radius:10px;background:var(--mint);color:var(--green);
+  display:flex;align-items:center;justify-content:center}
+.chip svg{width:22px;height:22px}
+.sec-name{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);line-height:1.3}
+.sec-sub{font-size:13px;color:var(--muted)}
+
+h2.q{font-size:24px;line-height:1.3;color:var(--teal);margin:0 0 8px;font-weight:700}
+.help{font-size:15px;font-style:italic;color:var(--muted);margin:0 0 4px}
+
+/* Opciones */
+.opts{display:flex;flex-direction:column;gap:10px;margin:22px 0 0}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  background:var(--card);color:var(--text);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;min-height:58px;font:inherit;font-size:16px;line-height:1.4;
+  transition:border-color .15s,background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.opt:hover{border-color:var(--line-strong)}
+.opt .mark{flex:0 0 24px;height:24px;border-radius:50%;border:1.5px solid var(--line-strong);background:#fff;
+  display:flex;align-items:center;justify-content:center;color:#fff}
+.opt .mark svg{width:14px;height:14px;opacity:0}
+.opt .lbl-o{flex:1}
+.opt .sug{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--green);margin-bottom:2px}
+.opt[aria-checked="true"]{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px var(--mint)}
+.opt[aria-checked="true"] .mark{background:var(--teal);border-color:var(--teal)}
+.opt[aria-checked="true"] .mark svg{opacity:1}
+.opt:focus-visible,.btn:focus-visible,.seg button:focus-visible,.link:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:3px solid var(--teal);outline-offset:2px}
+
+.detail{margin-top:14px}
+.detail[hidden]{display:none}
+label.lbl{display:block;font-size:14px;font-weight:700;color:var(--teal);margin:0 0 6px}
+input[type=text],textarea{width:100%;font:inherit;color:var(--text);background:#fff;
+  border:1.5px solid var(--line);border-radius:10px;padding:12px 14px}
+input[type=text]:focus,textarea:focus{border-color:var(--teal)}
+textarea{min-height:96px;resize:vertical}
+.field{margin:0 0 16px}
+.fields{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px 4px;margin:24px 0 0}
+
+/* Navegación inferior */
+.nav{position:sticky;bottom:0;background:linear-gradient(to top,#fff 70%,rgba(255,255,255,0));
+  padding:16px 0;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+.nav .wrap{display:flex;gap:10px}
+.btn{min-height:50px;border-radius:12px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;padding:12px 18px;
+  border:1.5px solid var(--teal);background:var(--teal);color:#fff;-webkit-tap-highlight-color:transparent}
+.btn:active{background:var(--teal-dark)}
+.btn.ghost{background:#fff;color:var(--teal);border-color:var(--line)}
+.btn.grow{flex:1}
+.btn[hidden],.nav[hidden]{display:none}
+
+/* Resultado */
+.res h1{font-size:28px;line-height:1.2;color:var(--teal);margin:0 0 10px}
+.res h3{font-size:18px;color:var(--teal);margin:28px 0 10px}
+.res .body{margin:0 0 8px}
+.pending{color:var(--warn);font-size:14px;margin:8px 0 0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 14px;background:#fff}
+.seg button{flex:1;min-height:44px;font:inherit;font-size:15px;font-weight:700;border:0;background:transparent;color:var(--teal);cursor:pointer}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--teal);color:#fff}
+.stack{display:flex;flex-direction:column;gap:10px}
+.status{font-size:14px;margin:10px 0 0;min-height:1.4em;color:var(--green)}
+.small{font-size:13px;color:var(--muted);font-style:italic;margin:10px 0 0}
+
+.table{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.t-sec{background:var(--mint);color:var(--teal);font-weight:700;font-size:14px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.t-sec svg{width:18px;height:18px;color:var(--green)}
+.t-row{padding:12px 14px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:4px 12px}
+.t-q{font-size:14px;color:var(--muted);grid-column:1}
+.t-a{grid-column:1;font-weight:700}
+.t-a.empty{color:var(--warn);font-weight:400;font-style:italic}
+.t-d{grid-column:1;font-size:14px}
+.link{grid-column:2;grid-row:1 / span 3;align-self:center;background:none;border:0;padding:8px 0 8px 8px;font:inherit;font-size:14px;
+  font-weight:700;color:var(--teal);cursor:pointer;min-height:44px}
+</style>
+</head>
+<body>
+<header class="top" id="top" hidden>
+  <div class="wrap">
+    <span class="brand">Cuestionario</span>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+</header>
+
+<main id="app" tabindex="-1"><div class="wrap" id="screen"></div></main>
+
+<div class="nav" id="nav">
+  <div class="wrap">
+    <button class="btn ghost" id="prev" type="button">Anterior</button>
+    <button class="btn grow" id="next" type="button">Empezar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var ICONOS = {
+  tienda:'<path d="M4 10v10h16V10M3 10l2-6h14l2 6M3 10h18M9 20v-6h6v6"/>',
+  caja:'<path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/>',
+  servicio:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+  pago:'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5M18 9.5v5"/>',
+  reporte:'<path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/>',
+  usuarios:'<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 5.2a3 3 0 0 1 0 5.6M17.5 14a5 5 0 0 1 3 5"/>'
+};
+function icono(k){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONOS[k] || "") + "</svg>"; }
+var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+var SECCIONES = [
+ {titulo:"Sucursales y equipos", icon:"tienda", preguntas:[
+  {id:"pcs", t:"¿Cuántas computadoras se usan para vender en cada sucursal?",
+   o:["Una computadora por sucursal","Dos o más, con varias personas vendiendo al mismo tiempo"],
+   otro:"Por ejemplo: la sucursal Centro tiene dos y las otras una"},
+  {id:"equipo", t:"¿Qué computadoras tienen en las sucursales?",
+   o:["Windows, con menos de 5 años de uso","Windows, con 5 años de uso o más"],
+   otro:"Marca, sistema o años aproximados"},
+  {id:"perifericos", t:"¿Tienen lector de código de barras o impresora de tickets?",
+   o:["No tenemos ninguno de los dos","Tenemos lector de código de barras"],
+   otro:"Qué equipo tienen y en qué sucursales"},
+  {id:"internet", t:"¿Cómo es el internet en las sucursales?",
+   o:["Estable, casi nunca se cae","Se cae varias veces por semana"],
+   otro:"Cuántas veces se cae y por cuánto tiempo"},
+  {id:"nombres", t:"¿Cómo se llama cada sucursal?",
+   o:["Por su ubicación, por ejemplo Centro, Norte y Sur","Sucursal 1, Sucursal 2 y Sucursal 3"],
+   otro:"Escriban el nombre de cada sucursal"}
+ ]},
+ {titulo:"Productos", icon:"caja", preguntas:[
+  {id:"tipo", t:"¿Qué tipo de productos venden?",
+   o:["Medicinas y vacunas","Medicinas, vacunas, alimento y accesorios"],
+   otro:"Qué otros productos venden"},
+  {id:"cantidad", t:"¿Cuántos productos distintos hay, más o menos, en cada sucursal?",
+   o:["Menos de 500","Entre 500 y 2,000"],
+   otro:"Cantidad aproximada"},
+  {id:"fraccion", t:"¿Algún producto se vende por peso o por fracción?",
+   o:["No, todo se vende por unidad","Sí, por ejemplo alimento por libra o pastillas sueltas"],
+   otro:"Qué productos y cómo se venden"},
+  {id:"vence", t:"¿Todos los productos llevan fecha de vencimiento?",
+   o:["Sí, todos","Solo algunos, como medicinas y vacunas"],
+   otro:"Qué productos llevan vencimiento"},
+  {id:"alerta_dias", t:"¿Con cuántos días de anticipación quieren el aviso de vencimiento?",
+   h:"El producto se marcará en amarillo primero y en rojo cuando falte poco.",
+   o:["Amarillo a 90 días y rojo a 30 días","Amarillo a 60 días y rojo a 15 días"],
+   otro:"Los días que prefieren"},
+  {id:"vencido", t:"¿Qué debe hacer el sistema con un producto vencido?",
+   o:["No dejar venderlo","Dejar venderlo, pero mostrar un aviso"],
+   otro:"Qué debe pasar"},
+  {id:"minimo", t:"Para el aviso de producto por acabarse, ¿cómo se define la cantidad mínima?",
+   o:["Un mínimo distinto para cada producto","Un mínimo general para todos los productos"],
+   otro:"Cómo lo prefieren"},
+  {id:"precios", t:"¿Los productos y los precios son los mismos en las 3 sucursales?",
+   o:["Sí, los mismos productos con los mismos precios","Los mismos productos, con precios distintos en cada sucursal"],
+   otro:"Qué cambia entre sucursales"},
+  {id:"crea", t:"¿Quién crea un producto nuevo en el sistema?",
+   o:["Solo la oficina","Cada sucursal crea los suyos"],
+   otro:"Quién lo haría"},
+  {id:"excel", t:"¿Tienen una lista de productos en Excel con costo, precio y vencimiento?",
+   o:["Sí, la tenemos en Excel","No, hay que armarla"],
+   d:{1:"¿Quién la armaría?"},
+   otro:"En qué forma tienen la lista hoy"},
+  {id:"control", t:"¿Hay algún requisito de registro o control de medicamentos veterinarios que el sistema deba llevar?",
+   o:["No, ninguno","Sí, algunos medicamentos tienen control especial"],
+   d:{1:"¿Cuáles y qué se debe anotar?"},
+   otro:"Qué requisito hay"}
+ ]},
+ {titulo:"Servicios", icon:"servicio", preguntas:[
+  {id:"servicios", t:"¿Qué servicios dan?",
+   h:"Si pueden, anoten también el precio de cada uno.",
+   o:["Consulta, vacunación y desparasitación","Además de esos, baño, cirugía y hospitalización"],
+   d:{0:"Precios, si los tienen a mano",1:"Precios, si los tienen a mano"},
+   otro:"Lista de servicios y precios"},
+  {id:"precio_serv", t:"¿El precio de un servicio es siempre el mismo?",
+   o:["Sí, siempre es el mismo","Cambia según el caso y quien cobra lo puede ajustar"],
+   otro:"Cómo se define el precio"},
+  {id:"costo_serv", t:"¿Quieren anotar cuánto les cuesta dar cada servicio?",
+   o:["No, solo el precio","Sí, para ver la ganancia de cada servicio"],
+   otro:"Qué prefieren"},
+  {id:"veterinario", t:"¿Quieren saber qué veterinario dio cada servicio?",
+   o:["No hace falta","Sí, para tener reportes por persona"],
+   otro:"Qué prefieren"},
+  {id:"cliente", t:"¿Quieren anotar el nombre del cliente y de su mascota en cada venta?",
+   o:["No, solo la venta","Sí, el nombre del cliente y de la mascota"],
+   otro:"Qué datos quieren anotar"}
+ ]},
+ {titulo:"Ventas, pagos y caja", icon:"pago", preguntas:[
+  {id:"metodos", t:"¿Qué métodos de pago aceptan?",
+   o:["Efectivo y transferencia","Efectivo, transferencia y tarjeta"],
+   otro:"Qué métodos aceptan"},
+  {id:"mixto", t:"¿Un cliente puede pagar una parte con un método y el resto con otro?",
+   o:["No, un solo método por venta","Sí, por ejemplo una parte en efectivo y otra con tarjeta"],
+   otro:"Cómo lo hacen"},
+  {id:"descuentos", t:"¿Hacen descuentos?",
+   o:["No hacemos descuentos","Sí, y solo el encargado los puede dar"],
+   otro:"Quién los da y si hay un máximo"},
+  {id:"credito", t:"¿Venden a crédito o fiado?",
+   o:["No","Sí, a algunos clientes"],
+   otro:"Cómo lo manejan hoy"},
+  {id:"fondo", t:"¿Empiezan el día con un fondo de efectivo en la caja?",
+   o:["Sí, con un fondo fijo","No, la caja empieza en cero"],
+   otro:"Cómo empiezan el día"},
+  {id:"retiros", t:"¿Sacan efectivo de la caja durante el día para gastos?",
+   o:["No","Sí, y lo anotamos"],
+   otro:"Para qué gastos y cómo lo anotan"},
+  {id:"turnos", t:"¿Hay varios turnos con distintos cajeros en un mismo día?",
+   o:["No, un solo turno","Sí, dos turnos o más"],
+   otro:"Cómo son los turnos"},
+  {id:"cierre", t:"¿Cómo cierran la caja hoy?",
+   o:["Cuentan el efectivo y lo comparan con el libro de ventas","Cuentan el efectivo y lo entregan a la oficina"],
+   otro:"Describan el cierre paso a paso"},
+  {id:"anular", t:"¿Quién puede anular una venta mal hecha?",
+   o:["El encargado de la sucursal","Solo el administrador"],
+   otro:"Quién lo puede hacer"}
+ ]},
+ {titulo:"Reportes", icon:"reporte", preguntas:[
+  {id:"reportes", t:"Además de las ventas del día y del mes, ¿qué reportes les interesan más?",
+   h:"La propuesta incluye cierre de caja, ventas, ganancia, inventario, por vencer, por acabarse, más vendidos, pérdidas y comparación entre sucursales.",
+   o:["Ganancia, inventario y productos por vencer","Todos los reportes de la propuesta"],
+   otro:"Qué reportes quieren"},
+  {id:"gastos", t:"¿Quieren registrar gastos como alquiler, salarios o luz, para saber cuánto les queda?",
+   o:["No, con la ganancia de las ventas es suficiente","Sí, queremos registrar los gastos"],
+   otro:"Qué gastos quieren registrar"},
+  {id:"quien_ve", t:"¿Quién necesita ver los reportes de todas las sucursales y desde dónde?",
+   h:"Ver la información de todas las sucursales necesita el servicio en línea.",
+   o:["El administrador, desde la oficina","El administrador, desde la oficina y desde el celular"],
+   otro:"Quién y desde dónde"}
+ ]},
+ {titulo:"Usuarios y proyecto", icon:"usuarios", preguntas:[
+  {id:"puestos", t:"¿Les sirven estos puestos: cajero, encargado de sucursal y administrador?",
+   h:"El cajero vende. El encargado además registra mercadería, anula ventas y cierra caja. El administrador ve y maneja todas las sucursales.",
+   o:["Sí, así está bien","Sí, pero en algunas sucursales el encargado también es el cajero"],
+   otro:"Qué puestos necesitan"},
+  {id:"cajero_costos", t:"¿El cajero puede ver el costo y la ganancia de los productos?",
+   o:["No, solo el precio de venta","Sí, puede verlos"],
+   otro:"Qué puede ver el cajero"},
+  {id:"servicio_linea", t:"¿Les interesa el servicio en línea, con pago mensual por transferencia?",
+   h:"Sin el servicio en línea, cada sucursal funcionará por separado y su información solo se verá en la computadora donde se instale.",
+   o:["Sí, nos interesa","No, cada sucursal trabajará por separado"],
+   otro:"Dudas sobre el servicio"},
+  {id:"decide", t:"¿Quién toma las decisiones del proyecto y con quién se ven las dudas del día a día?",
+   o:["La misma persona decide y atiende las dudas","Una persona decide y otra atiende las dudas"],
+   d:{0:"Nombre y teléfono",1:"Nombres y teléfonos"},
+   otro:"Nombres y teléfonos"},
+  {id:"cuando", t:"¿Para cuándo necesitan el sistema funcionando?",
+   o:["En cuanto esté listo, sin fecha fija","Tenemos una fecha límite"],
+   d:{1:"¿Cuál es la fecha?"},
+   otro:"Cuándo lo necesitan"},
+  {id:"prueba", t:"¿Les parece empezar con una sola sucursal de prueba y luego pasar a las otras dos?",
+   o:["Sí, una primero y luego las otras dos","No, preferimos las 3 a la vez"],
+   d:{0:"¿Qué sucursal sería la primera?"},
+   otro:"Cómo lo prefieren"},
+  {id:"soporte", t:"¿Les interesa un soporte mensual después de la entrega, para dudas, correcciones y cambios pequeños?",
+   o:["Sí, nos interesa","No, por ahora no"],
+   otro:"Qué tipo de soporte buscan"}
+ ]}
+];
+
+var OTRO = "Otro";
+var KEY = "cuestionario-sistema-v2";
+var params = new URLSearchParams(location.search);
+var TEL = (params.get("tel") || "").replace(/\D/g, "");
+
+// Lista plana de preguntas
+var Q = [];
+SECCIONES.forEach(function(s, si){
+  s.preguntas.forEach(function(p, pi){ Q.push({s:s, si:si, pi:pi, p:p}); });
+});
+var total = Q.length;
+var FIN = total + 1; // paso 0 portada, 1..total preguntas, total+1 resultado
+
+var state = load() || {paso:0, datos:{nombre:"", negocio:""}, resp:{}, comentarios:"", formato:"txt", desdeFin:false};
+if (typeof state.paso !== "number" || state.paso < 0 || state.paso > FIN) state.paso = 0;
+
+var screen = document.getElementById("screen");
+var app = document.getElementById("app");
+var top = document.getElementById("top");
+var nav = document.getElementById("nav");
+var btnPrev = document.getElementById("prev");
+var btnNext = document.getElementById("next");
+var countEl = document.getElementById("count");
+var barEl = document.getElementById("bar");
+var avanceTimer = null;
+
+function load(){ try{ var s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function el(tag, attrs, html){
+  var e = document.createElement(tag);
+  if (attrs) for (var k in attrs){ if (k === "text") e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); }
+  if (html != null) e.innerHTML = html;
+  return e;
+}
+function respondida(p){ var r = state.resp[p.id]; return !!(r && r.op != null); }
+function contestadas(){ var n = 0; Q.forEach(function(q){ if (respondida(q.p)) n++; }); return n; }
+
+function render(){
+  clearTimeout(avanceTimer);
+  screen.innerHTML = "";
+  var paso = state.paso;
+  var box = el("div", {"class":"screen"});
+  screen.appendChild(box);
+  top.hidden = paso === 0;
+  if (paso === 0) renderPortada(box);
+  else if (paso === FIN) renderFin(box);
+  else renderPregunta(box, Q[paso - 1]);
+  actualizarCabecera();
+  save();
+  window.scrollTo(0, 0);
+}
+
+function actualizarCabecera(){
+  var paso = state.paso;
+  var c = contestadas();
+  barEl.style.width = (paso === FIN ? 100 : Math.round((paso - 1) / total * 100)) + "%";
+  countEl.textContent = paso === FIN ? c + " de " + total + " respondidas" : paso > 0 ? paso + " de " + total : "";
+  btnPrev.hidden = paso === 0;
+  nav.hidden = paso === FIN;
+  if (paso === 0){
+    btnNext.textContent = c ? "Continuar donde quedó" : "Empezar";
+  } else if (paso === FIN){
+    btnNext.textContent = "Ir a la primera pregunta";
+  } else {
+    var q = Q[paso - 1];
+    if (state.desdeFin) btnNext.textContent = "Volver al resultado";
+    else if (paso === total) btnNext.textContent = respondida(q.p) ? "Ver resultado" : "Saltar y ver resultado";
+    else btnNext.textContent = respondida(q.p) ? "Siguiente" : "Saltar";
+  }
+}
+
+function renderPortada(box){
+  var c = el("div", {"class":"cover"});
+  c.appendChild(el("p", {"class":"kicker"}, "Cuestionario del sistema"));
+  c.appendChild(el("h1", null, "Sistema de ventas e inventario"));
+  c.appendChild(el("div", {"class":"rule"}));
+  c.appendChild(el("p", {"class":"mods"}, "Ventas · Inventario · Vencimientos · Cierre de caja · Reportes"));
+  c.appendChild(el("p", {"class":"body"},
+    "Estas " + total + " preguntas sirven para definir cómo funcionará el sistema en sus sucursales. " +
+    "Cada pregunta trae dos respuestas sugeridas. Si ninguna se ajusta, elijan Otro y escriban su respuesta."));
+  c.appendChild(el("p", {"class":"body"},
+    "Pueden saltar una pregunta y volver a ella después. Al terminar, el resultado se envía por WhatsApp."));
+  var f = el("div", {"class":"fields"});
+  f.appendChild(campo("nombre", "Nombre de quien responde", state.datos.nombre, function(v){ state.datos.nombre = v; save(); }));
+  f.appendChild(campo("negocio", "Nombre del negocio", state.datos.negocio, function(v){ state.datos.negocio = v; save(); }));
+  c.appendChild(f);
+  c.appendChild(el("p", {"class":"note"}, "Las respuestas se guardan en este teléfono hasta que las envíen."));
+  box.appendChild(c);
+}
+
+function campo(id, label, val, on){
+  var w = el("div", {"class":"field"});
+  w.appendChild(el("label", {"class":"lbl", "for":"f-" + id, text:label}));
+  var i = el("input", {type:"text", id:"f-" + id, autocomplete:"off", enterkeyhint:"next"});
+  i.value = val || "";
+  i.addEventListener("input", function(){ on(i.value); });
+  w.appendChild(i);
+  return w;
+}
+
+function renderPregunta(box, q){
+  var p = q.p, s = q.s;
+  var sec = el("div", {"class":"sec"});
+  sec.innerHTML = '<span class="chip">' + icono(s.icon) + '</span><span><span class="sec-name">' + esc(s.titulo) +
+    '</span><br><span class="sec-sub">Pregunta ' + (q.pi + 1) + " de " + s.preguntas.length + " en esta sección</span></span>";
+  box.appendChild(sec);
+  box.appendChild(el("h2", {"class":"q", id:"qt"}, esc(p.t)));
+  if (p.h) box.appendChild(el("p", {"class":"help"}, esc(p.h)));
+
+  var lista = p.o.concat([OTRO]);
+  var opts = el("div", {"class":"opts", role:"radiogroup", "aria-labelledby":"qt"});
+  var det = el("div", {"class":"detail", hidden:""});
+  var r = state.resp[p.id] || {};
+
+  function phDe(i){ return i === lista.length - 1 ? p.otro : (p.d && p.d[i]); }
+
+  function pintarDetalle(foco){
+    det.innerHTML = "";
+    var cur = state.resp[p.id];
+    var ph = cur && cur.op != null ? phDe(cur.op) : null;
+    if (!ph){ det.hidden = true; return; }
+    det.hidden = false;
+    var esOtro = cur.op === lista.length - 1;
+    det.appendChild(el("label", {"class":"lbl", "for":"det", text: esOtro ? "Escriban su respuesta" : "Detalle (opcional)"}));
+    var ta = el("textarea", {id:"det", placeholder:ph, rows:"3"});
+    ta.value = cur.det || "";
+    ta.addEventListener("input", function(){ state.resp[p.id].det = ta.value; save(); });
+    det.appendChild(ta);
+    if (foco) setTimeout(function(){ ta.focus(); }, 50);
+  }
+
+  lista.forEach(function(txt, i){
+    var sugerida = i < p.o.length;
+    var b = el("button", {type:"button", "class":"opt", role:"radio", "aria-checked": String(r.op === i)});
+    b.innerHTML = '<span class="mark">' + CHECK + '</span><span class="lbl-o">' +
+      (sugerida ? '<span class="sug">Sugerida</span>' : "") + esc(txt) + "</span>";
+    b.addEventListener("click", function(){
+      var prev = state.resp[p.id] || {};
+      state.resp[p.id] = {op:i, det: prev.op === i ? prev.det : ""};
+      Array.prototype.forEach.call(opts.children, function(x, j){ x.setAttribute("aria-checked", String(j === i)); });
+      var conDetalle = !!phDe(i);
+      pintarDetalle(i === lista.length - 1);
+      save();
+      actualizarCabecera();
+      clearTimeout(avanceTimer);
+      if (!conDetalle) avanceTimer = setTimeout(siguiente, 420);
+    });
+    opts.appendChild(b);
+  });
+  box.appendChild(opts);
+  box.appendChild(det);
+  pintarDetalle(false);
+}
+
+function respuestaTexto(p){
+  var r = state.resp[p.id];
+  if (!r || r.op == null) return {a:"Sin responder", d:"", vacia:true};
+  var d = (r.det || "").trim();
+  if (r.op === p.o.length) return {a: d ? "Otro: " + d : "Otro (sin detalle)", d:"", vacia:false};
+  return {a: p.o[r.op], d: d, vacia:false};
+}
+
+function renderFin(box){
+  var c = contestadas();
+  var w = el("div", {"class":"res"});
+  w.appendChild(el("p", {"class":"kicker"}, "Cuestionario terminado"));
+  w.appendChild(el("h1", null, "Resultado"));
+  w.appendChild(el("p", {"class":"body"}, "Revisen sus respuestas y envíen el resultado por WhatsApp. Para cambiar una respuesta, toquen Cambiar."));
+  if (c < total) w.appendChild(el("p", {"class":"pending"},
+    (total - c) + (total - c === 1 ? " pregunta quedó" : " preguntas quedaron") + " sin responder. Se puede enviar así."));
+
+  w.appendChild(el("h3", null, "Comentarios generales"));
+  var ta = el("textarea", {id:"coment", rows:"3", placeholder:"Algo más que quieran agregar (opcional)", "aria-label":"Comentarios generales"});
+  ta.value = state.comentarios || "";
+  ta.addEventListener("input", function(){ state.comentarios = ta.value; save(); });
+  w.appendChild(ta);
+
+  w.appendChild(el("h3", null, "Enviar el resultado"));
+  var panel = el("div", {"class":"panel"});
+  panel.appendChild(el("label", {"class":"lbl", id:"fmt-l"}, "Formato del archivo"));
+  var seg = el("div", {"class":"seg", role:"group", "aria-labelledby":"fmt-l"});
+  [["txt","Texto"],["csv","Excel (CSV)"],["md","Markdown"]].forEach(function(f){
+    var b = el("button", {type:"button", "aria-pressed": String(state.formato === f[0])}, esc(f[1]));
+    b.addEventListener("click", function(){
+      state.formato = f[0]; save();
+      Array.prototype.forEach.call(seg.children, function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+    });
+    seg.appendChild(b);
+  });
+  panel.appendChild(seg);
+  var st = el("div", {"class":"stack"});
+  var b1 = el("button", {"class":"btn", type:"button"}, "Compartir archivo por WhatsApp");
+  var b2 = el("button", {"class":"btn ghost", type:"button"}, "Enviar como mensaje de texto");
+  var b3 = el("button", {"class":"btn ghost", type:"button"}, "Descargar archivo");
+  st.appendChild(b1); st.appendChild(b2); st.appendChild(b3);
+  panel.appendChild(st);
+  var status = el("p", {"class":"status", role:"status"});
+  panel.appendChild(status);
+  panel.appendChild(el("p", {"class":"small"},
+    "Compartir archivo abre el menú del teléfono para elegir WhatsApp y el contacto. Si el teléfono no lo permite, se descarga el archivo y se abre WhatsApp con las respuestas como mensaje."));
+  w.appendChild(panel);
+  b1.addEventListener("click", function(){ compartir(status); });
+  b2.addEventListener("click", function(){ status.textContent = "Abriendo WhatsApp."; abrirWhatsApp(); });
+  b3.addEventListener("click", function(){ descargar(); status.textContent = "Archivo descargado."; });
+
+  w.appendChild(el("h3", null, "Sus respuestas"));
+  var t = el("div", {"class":"table"});
+  var lastSi = -1;
+  Q.forEach(function(q, idx){
+    if (q.si !== lastSi){ lastSi = q.si; t.appendChild(el("div", {"class":"t-sec"}, icono(q.s.icon) + esc(q.s.titulo))); }
+    var r = respuestaTexto(q.p);
+    var row = el("div", {"class":"t-row"});
+    row.appendChild(el("div", {"class":"t-q"}, (idx + 1) + ". " + esc(q.p.t)));
+    row.appendChild(el("div", {"class":"t-a" + (r.vacia ? " empty" : "")}, esc(r.a)));
+    if (r.d) row.appendChild(el("div", {"class":"t-d"}, esc(r.d)));
+    var ch = el("button", {"class":"link", type:"button", "aria-label":"Cambiar la respuesta " + (idx + 1)}, "Cambiar");
+    ch.addEventListener("click", function(){ state.desdeFin = true; ir(idx + 1); });
+    row.appendChild(ch);
+    t.appendChild(row);
+  });
+  w.appendChild(t);
+  box.appendChild(w);
+}
+
+function ir(paso){ state.paso = paso; render(); app.focus({preventScroll:true}); }
+function siguiente(){
+  if (state.paso === FIN){ state.desdeFin = false; ir(1); return; }
+  if (state.desdeFin && state.paso > 0){ state.desdeFin = false; ir(FIN); return; }
+  if (state.paso === 0 && contestadas()){
+    for (var i = 0; i < total; i++){ if (!respondida(Q[i].p)){ ir(i + 1); return; } }
+    ir(FIN); return;
+  }
+  ir(state.paso + 1);
+}
+function anterior(){ state.desdeFin = false; if (state.paso > 0) ir(state.paso - 1); }
+btnNext.addEventListener("click", siguiente);
+btnPrev.addEventListener("click", anterior);
+
+/* Exportación */
+function fecha(){
+  var d = new Date();
+  try { return d.toLocaleDateString("es-HN", {year:"numeric", month:"long", day:"numeric"}); }
+  catch(e){ return d.toISOString().slice(0, 10); }
+}
+function nombreArchivo(ext){
+  var base = (state.datos.negocio || state.datos.nombre || "").trim()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "");
+  return "Cuestionario_" + (base || "respuestas") + "." + ext;
+}
+function genTxt(){
+  var L = ["CUESTIONARIO DEL SISTEMA DE VENTAS E INVENTARIO"];
+  if (state.datos.nombre) L.push("Responde: " + state.datos.nombre);
+  if (state.datos.negocio) L.push("Negocio: " + state.datos.negocio);
+  L.push("Fecha: " + fecha());
+  L.push("Respondidas: " + contestadas() + " de " + total);
+  var lastSi = -1;
+  Q.forEach(function(q, idx){
+    if (q.si !== lastSi){ lastSi = q.si; L.push(""); L.push("== " + q.s.titulo.toUpperCase() + " =="); }
+    var r = respuestaTexto(q.p);
+    L.push(""); L.push((idx + 1) + ". " + q.p.t);
+    L.push("R: " + r.a);
+    if (r.d) L.push("Detalle: " + r.d);
+  });
+  if ((state.comentarios || "").trim()){ L.push(""); L.push("== COMENTARIOS =="); L.push(state.comentarios.trim()); }
+  return L.join("\n");
+}
+function genMd(){
+  var L = ["# Cuestionario del sistema de ventas e inventario", ""];
+  if (state.datos.nombre) L.push("- Responde: " + state.datos.nombre);
+  if (state.datos.negocio) L.push("- Negocio: " + state.datos.negocio);
+  L.push("- Fecha: " + fecha());
+  L.push("- Respondidas: " + contestadas() + " de " + total);
+  var lastSi = -1;
+  Q.forEach(function(q, idx){
+    if (q.si !== lastSi){ lastSi = q.si; L.push(""); L.push("## " + q.s.titulo); }
+    var r = respuestaTexto(q.p);
+    L.push(""); L.push("**" + (idx + 1) + ". " + q.p.t + "**"); L.push("");
+    L.push("- Respuesta: " + r.a);
+    if (r.d) L.push("- Detalle: " + r.d.replace(/\n+/g, " "));
+  });
+  if ((state.comentarios || "").trim()){ L.push(""); L.push("## Comentarios"); L.push(""); L.push(state.comentarios.trim()); }
+  return L.join("\n") + "\n";
+}
+function csvCel(v){ v = String(v == null ? "" : v); return /[",\n\r;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+function genCsv(){
+  var rows = [["Sección","N.º","Pregunta","Respuesta","Detalle"]];
+  Q.forEach(function(q, idx){ var r = respuestaTexto(q.p); rows.push([q.s.titulo, idx + 1, q.p.t, r.a, r.d]); });
+  if ((state.comentarios || "").trim()) rows.push(["Comentarios", "", "", state.comentarios.trim(), ""]);
+  rows.push(["Datos", "", "Responde", state.datos.nombre || "", ""]);
+  rows.push(["Datos", "", "Negocio", state.datos.negocio || "", ""]);
+  rows.push(["Datos", "", "Fecha", fecha(), ""]);
+  return "﻿" + rows.map(function(r){ return r.map(csvCel).join(","); }).join("\r\n") + "\r\n";
+}
+function archivo(){
+  var f = state.formato;
+  return {
+    nombre: nombreArchivo(f),
+    contenido: f === "csv" ? genCsv() : f === "md" ? genMd() : genTxt(),
+    tipo: f === "csv" ? "text/csv" : "text/plain"
+  };
+}
+function descargar(){
+  var a = archivo();
+  var url = URL.createObjectURL(new Blob([a.contenido], {type: a.tipo + ";charset=utf-8"}));
+  var link = el("a", {href:url, download:a.nombre});
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+}
+function abrirWhatsApp(){
+  window.location.href = "https://wa.me/" + TEL + "?text=" + encodeURIComponent(genTxt());
+}
+function compartir(status){
+  var a = archivo(), file = null;
+  try { file = new File([a.contenido], a.nombre, {type: a.tipo}); } catch(e){}
+  if (file && navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+    navigator.share({files:[file], title:a.nombre, text:"Respuestas del cuestionario del sistema de ventas e inventario"})
+      .then(function(){ status.textContent = "Listo. Revisen en WhatsApp que el archivo se haya enviado."; })
+      .catch(function(err){
+        if (err && err.name === "AbortError"){ status.textContent = "Se canceló el envío."; return; }
+        respaldo(status);
+      });
+  } else respaldo(status);
+}
+function respaldo(status){
+  status.textContent = "Este teléfono no permite compartir el archivo. Se descargó y se abrirá WhatsApp con las respuestas como mensaje.";
+  descargar();
+  setTimeout(abrirWhatsApp, 900);
+}
+
+render();
+})();
+</script>
+</body>
+</html>
