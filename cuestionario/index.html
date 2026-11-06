@@ -74,8 +74,7 @@ h2.q{font-size:24px;line-height:1.3;color:var(--teal);margin:0 0 8px;font-weight
 .opt[aria-checked="true"]{border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px var(--mint)}
 .opt[aria-checked="true"] .mark{background:var(--teal);border-color:var(--teal)}
 .opt[aria-checked="true"] .mark svg{opacity:1}
-.opt:focus-visible,.btn:focus-visible,.seg button:focus-visible,.link:focus-visible,input:focus-visible,textarea:focus-visible{
-  outline:3px solid var(--teal);outline-offset:2px}
+.opt:focus-visible,.btn:focus-visible,  outline:3px solid var(--teal);outline-offset:2px}
 
 .detail{margin-top:14px}
 .detail[hidden]{display:none}
@@ -104,10 +103,6 @@ textarea{min-height:96px;resize:vertical}
 .res .body{margin:0 0 8px}
 .pending{color:var(--warn);font-size:14px;margin:8px 0 0}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
-.seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 14px;background:#fff}
-.seg button{flex:1;min-height:44px;font:inherit;font-size:15px;font-weight:700;border:0;background:transparent;color:var(--teal);cursor:pointer}
-.seg button+button{border-left:1.5px solid var(--line)}
-.seg button[aria-pressed="true"]{background:var(--teal);color:#fff}
 .stack{display:flex;flex-direction:column;gap:10px}
 .status{font-size:14px;margin:10px 0 0;min-height:1.4em;color:var(--green)}
 .small{font-size:13px;color:var(--muted);font-style:italic;margin:10px 0 0}
@@ -207,11 +202,7 @@ var SECCIONES = [
   {id:"excel", t:"¿Tienen una lista de productos en Excel con costo, precio y vencimiento?",
    o:["Sí, la tenemos en Excel","No, hay que armarla"],
    d:{1:"¿Quién la armaría?"},
-   otro:"En qué forma tienen la lista hoy"},
-  {id:"control", t:"¿Hay algún requisito de registro o control de medicamentos veterinarios que el sistema deba llevar?",
-   o:["No, ninguno","Sí, algunos medicamentos tienen control especial"],
-   d:{1:"¿Cuáles y qué se debe anotar?"},
-   otro:"Qué requisito hay"}
+   otro:"En qué forma tienen la lista hoy"}
  ]},
  {titulo:"Servicios", icon:"servicio", preguntas:[
   {id:"servicios", t:"¿Qué servicios dan?",
@@ -266,9 +257,6 @@ var SECCIONES = [
    h:"La propuesta incluye cierre de caja, ventas, ganancia, inventario, por vencer, por acabarse, más vendidos, pérdidas y comparación entre sucursales.",
    o:["Ganancia, inventario y productos por vencer","Todos los reportes de la propuesta"],
    otro:"Qué reportes quieren"},
-  {id:"gastos", t:"¿Quieren registrar gastos como alquiler, salarios o luz, para saber cuánto les queda?",
-   o:["No, con la ganancia de las ventas es suficiente","Sí, queremos registrar los gastos"],
-   otro:"Qué gastos quieren registrar"},
   {id:"quien_ve", t:"¿Quién necesita ver los reportes de todas las sucursales y desde dónde?",
    h:"Ver la información de todas las sucursales necesita el servicio en línea.",
    o:["El administrador, desde la oficina","El administrador, desde la oficina y desde el celular"],
@@ -282,25 +270,14 @@ var SECCIONES = [
   {id:"cajero_costos", t:"¿El cajero puede ver el costo y la ganancia de los productos?",
    o:["No, solo el precio de venta","Sí, puede verlos"],
    otro:"Qué puede ver el cajero"},
-  {id:"servicio_linea", t:"¿Les interesa el servicio en línea, con pago mensual por transferencia?",
-   h:"Sin el servicio en línea, cada sucursal funcionará por separado y su información solo se verá en la computadora donde se instale.",
-   o:["Sí, nos interesa","No, cada sucursal trabajará por separado"],
-   otro:"Dudas sobre el servicio"},
   {id:"decide", t:"¿Quién toma las decisiones del proyecto y con quién se ven las dudas del día a día?",
    o:["La misma persona decide y atiende las dudas","Una persona decide y otra atiende las dudas"],
    d:{0:"Nombre y teléfono",1:"Nombres y teléfonos"},
    otro:"Nombres y teléfonos"},
-  {id:"cuando", t:"¿Para cuándo necesitan el sistema funcionando?",
-   o:["En cuanto esté listo, sin fecha fija","Tenemos una fecha límite"],
-   d:{1:"¿Cuál es la fecha?"},
-   otro:"Cuándo lo necesitan"},
   {id:"prueba", t:"¿Les parece empezar con una sola sucursal de prueba y luego pasar a las otras dos?",
    o:["Sí, una primero y luego las otras dos","No, preferimos las 3 a la vez"],
    d:{0:"¿Qué sucursal sería la primera?"},
-   otro:"Cómo lo prefieren"},
-  {id:"soporte", t:"¿Les interesa un soporte mensual después de la entrega, para dudas, correcciones y cambios pequeños?",
-   o:["Sí, nos interesa","No, por ahora no"],
-   otro:"Qué tipo de soporte buscan"}
+   otro:"Cómo lo prefieren"}
  ]}
 ];
 
@@ -317,7 +294,7 @@ SECCIONES.forEach(function(s, si){
 var total = Q.length;
 var FIN = total + 1; // paso 0 portada, 1..total preguntas, total+1 resultado
 
-var state = load() || {paso:0, datos:{nombre:"", negocio:""}, resp:{}, comentarios:"", formato:"txt", desdeFin:false};
+var state = load() || {paso:0, datos:{nombre:"", negocio:""}, resp:{}, comentarios:"", desdeFin:false};
 if (typeof state.paso !== "number" || state.paso < 0 || state.paso > FIN) state.paso = 0;
 
 var screen = document.getElementById("screen");
@@ -484,31 +461,18 @@ function renderFin(box){
 
   w.appendChild(el("h3", null, "Enviar el resultado"));
   var panel = el("div", {"class":"panel"});
-  panel.appendChild(el("label", {"class":"lbl", id:"fmt-l"}, "Formato del archivo"));
-  var seg = el("div", {"class":"seg", role:"group", "aria-labelledby":"fmt-l"});
-  [["txt","Texto"],["csv","Excel (CSV)"],["md","Markdown"]].forEach(function(f){
-    var b = el("button", {type:"button", "aria-pressed": String(state.formato === f[0])}, esc(f[1]));
-    b.addEventListener("click", function(){
-      state.formato = f[0]; save();
-      Array.prototype.forEach.call(seg.children, function(x){ x.setAttribute("aria-pressed", String(x === b)); });
-    });
-    seg.appendChild(b);
-  });
-  panel.appendChild(seg);
   var st = el("div", {"class":"stack"});
-  var b1 = el("button", {"class":"btn", type:"button"}, "Compartir archivo por WhatsApp");
-  var b2 = el("button", {"class":"btn ghost", type:"button"}, "Enviar como mensaje de texto");
-  var b3 = el("button", {"class":"btn ghost", type:"button"}, "Descargar archivo");
-  st.appendChild(b1); st.appendChild(b2); st.appendChild(b3);
+  var b1 = el("button", {"class":"btn", type:"button"}, "Enviar por WhatsApp");
+  var b2 = el("button", {"class":"btn ghost", type:"button"}, "Enviar como mensaje de WhatsApp");
+  st.appendChild(b1); st.appendChild(b2);
   panel.appendChild(st);
   var status = el("p", {"class":"status", role:"status"});
   panel.appendChild(status);
   panel.appendChild(el("p", {"class":"small"},
-    "Compartir archivo abre el menú del teléfono para elegir WhatsApp y el contacto. Si el teléfono no lo permite, se descarga el archivo y se abre WhatsApp con las respuestas como mensaje."));
+    "Enviar por WhatsApp abre el menú del teléfono para elegir WhatsApp y el contacto. Si no funciona, usen Enviar como mensaje de WhatsApp."));
   w.appendChild(panel);
   b1.addEventListener("click", function(){ compartir(status); });
   b2.addEventListener("click", function(){ status.textContent = "Abriendo WhatsApp."; abrirWhatsApp(); });
-  b3.addEventListener("click", function(){ descargar(); status.textContent = "Archivo descargado."; });
 
   w.appendChild(el("h3", null, "Sus respuestas"));
   var t = el("div", {"class":"table"});
@@ -571,40 +535,8 @@ function genTxt(){
   if ((state.comentarios || "").trim()){ L.push(""); L.push("== COMENTARIOS =="); L.push(state.comentarios.trim()); }
   return L.join("\n");
 }
-function genMd(){
-  var L = ["# Cuestionario del sistema de ventas e inventario", ""];
-  if (state.datos.nombre) L.push("- Responde: " + state.datos.nombre);
-  if (state.datos.negocio) L.push("- Negocio: " + state.datos.negocio);
-  L.push("- Fecha: " + fecha());
-  L.push("- Respondidas: " + contestadas() + " de " + total);
-  var lastSi = -1;
-  Q.forEach(function(q, idx){
-    if (q.si !== lastSi){ lastSi = q.si; L.push(""); L.push("## " + q.s.titulo); }
-    var r = respuestaTexto(q.p);
-    L.push(""); L.push("**" + (idx + 1) + ". " + q.p.t + "**"); L.push("");
-    L.push("- Respuesta: " + r.a);
-    if (r.d) L.push("- Detalle: " + r.d.replace(/\n+/g, " "));
-  });
-  if ((state.comentarios || "").trim()){ L.push(""); L.push("## Comentarios"); L.push(""); L.push(state.comentarios.trim()); }
-  return L.join("\n") + "\n";
-}
-function csvCel(v){ v = String(v == null ? "" : v); return /[",\n\r;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
-function genCsv(){
-  var rows = [["Sección","N.º","Pregunta","Respuesta","Detalle"]];
-  Q.forEach(function(q, idx){ var r = respuestaTexto(q.p); rows.push([q.s.titulo, idx + 1, q.p.t, r.a, r.d]); });
-  if ((state.comentarios || "").trim()) rows.push(["Comentarios", "", "", state.comentarios.trim(), ""]);
-  rows.push(["Datos", "", "Responde", state.datos.nombre || "", ""]);
-  rows.push(["Datos", "", "Negocio", state.datos.negocio || "", ""]);
-  rows.push(["Datos", "", "Fecha", fecha(), ""]);
-  return "﻿" + rows.map(function(r){ return r.map(csvCel).join(","); }).join("\r\n") + "\r\n";
-}
 function archivo(){
-  var f = state.formato;
-  return {
-    nombre: nombreArchivo(f),
-    contenido: f === "csv" ? genCsv() : f === "md" ? genMd() : genTxt(),
-    tipo: f === "csv" ? "text/csv" : "text/plain"
-  };
+  return {nombre: nombreArchivo("txt"), contenido: genTxt(), tipo: "text/plain"};
 }
 function descargar(){
   var a = archivo();
@@ -629,7 +561,7 @@ function compartir(status){
   } else respaldo(status);
 }
 function respaldo(status){
-  status.textContent = "Este teléfono no permite compartir el archivo. Se descargó y se abrirá WhatsApp con las respuestas como mensaje.";
+  status.textContent = "Abriendo WhatsApp con las respuestas como mensaje.";
   descargar();
   setTimeout(abrirWhatsApp, 900);
 }
