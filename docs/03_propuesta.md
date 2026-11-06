@@ -297,4 +297,4 @@ El cliente acepta el MVP cuando, en la tienda piloto, durante **al menos 5 días
 2. Con las respuestas (sobre todo cuántas PCs por sucursal y cómo es el internet), confirmar el diseño híbrido y cerrar el alcance del MVP.
 3. Hacer bocetos de las pantallas de vender, inventario y cierre, y validarlos.
 4. Cotizar con la estimación de §11 y tu tarifa.
-5. Crear el repositorio nuevo y empezar la Fase 1.
+5. Empezar la Fase 1 en este repositorio.
